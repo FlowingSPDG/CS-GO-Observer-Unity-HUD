@@ -4,6 +4,7 @@ using UnityEngine;
 using CSGSI;
 using CSGSI.Nodes;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 public class GSI_Receiver : MonoBehaviour {
     GameStateListener gsl;
@@ -18,6 +19,8 @@ public class GSI_Receiver : MonoBehaviour {
 
     // all players information
     public object gsi_all_players;
+    public object[] gsi_all_players_array;
+    public string gsi_all_players_string;
     public string gsi_auth;
 
     // main informations who you observing at
@@ -27,6 +30,7 @@ public class GSI_Receiver : MonoBehaviour {
     public string spec_team;
     public string spec_weapon_active;
     public string[] spec_greandes;
+    public string spec_steamid;
     
 
     void Start () {
@@ -41,7 +45,7 @@ public class GSI_Receiver : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		
+        
 	}
 
     void OnNewGameState(GameState gs)
@@ -54,7 +58,20 @@ public class GSI_Receiver : MonoBehaviour {
         // gsi_team2 = gs.Map.TeamT.JSON; // チーム名
         gsi_team2_score = gs.Map.TeamT.Score;
 
-        gsi_all_players = JsonConvert.DeserializeObject(gs.AllPlayers.JSON);
+        //gsi_all_players = JsonConvert.DeserializeObject(gs.AllPlayers.JSON);
+        gsi_all_players_string = gs.AllPlayers.JSON;
+        
+        var gsi_all_players = JsonConvert.DeserializeObject<Dictionary<string, object>>(gsi_all_players_string);
+        //var gsi_all_players_state = JsonConvert.DeserializeObject<Dictionary<string, string>>(gsi_all_players_string + "[state]");
+        //var gsi_all_players_match_stats = JsonConvert.DeserializeObject<Dictionary<string, string>>(gsi_all_players_string + "match_stats");
+
+        foreach (var key in gsi_all_players.Keys)
+        {
+            Debug.Log("SteamID : " + key);
+            Debug.Log("dic : " + gsi_all_players[key]);
+        }
+        
+
         gsi_auth = gs.Auth.Token;
 
         spec_hp = gs.Player.State.Health;
@@ -62,5 +79,6 @@ public class GSI_Receiver : MonoBehaviour {
         spec_name = gs.Player.Name;
         spec_weapon_active = gs.Player.Weapons.ActiveWeapon.Name;
         spec_team = gs.Player.Team;
+        spec_steamid = gs.Player.SteamID;
     }
 }
