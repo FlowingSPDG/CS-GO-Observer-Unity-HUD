@@ -1,7 +1,7 @@
 (Proof-of-Concept,WIP)
 
 # CS-GO-Observer-Unity-HUD  
-This is the test program to show HUD by using GameStateIntegration,mirv_pgl,afx_interop.  
+This is the test program to show HUD(and others) by using GameStateIntegration,mirv_pgl,afx_interop.  
 
 ## Credits
 C# GSI Library from : https://github.com/rakijah/CSGSI  
