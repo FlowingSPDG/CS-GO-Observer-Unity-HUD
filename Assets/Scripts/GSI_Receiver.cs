@@ -6,6 +6,7 @@ using CSGSI.Nodes;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using UnityEngine.UI;
+using System;
 
 public class GSI_Receiver : MonoBehaviour {
     GameStateListener gsl;
@@ -27,6 +28,12 @@ public class GSI_Receiver : MonoBehaviour {
     // main informations who you observing at
     public int spec_hp;
     public int spec_ap;
+    public int spec_ammo_loaded;
+    public int spec_ammo_max;
+    public int spec_ammo_reserve;
+    public int spec_stats_kills;
+    public int spec_stats_deaths;
+    public int spec_stats_assists;
     public string spec_name;
     public string spec_team;
     public string spec_weapon_active;
@@ -38,6 +45,15 @@ public class GSI_Receiver : MonoBehaviour {
     public Text comp_spec_name;
     public Text comp_spec_hp;
     public Text comp_spec_ap;
+    public Text comp_spec_ammo_loaded;
+    public Text comp_spec_ammo_max;
+    public Text comp_spec_ammo_reserve;
+    public Text comp_spec_stats_kills;
+    public Text comp_spec_stats_assists;
+    public Text comp_spec_stats_deaths;
+
+    public Text comp_score_team1;
+    public Text comp_score_team2;
     /*
     public Text comp_; // etc
     */
@@ -57,6 +73,18 @@ public class GSI_Receiver : MonoBehaviour {
         comp_spec_name.text = spec_name.ToString();
         comp_spec_hp.text = spec_hp.ToString();
         comp_spec_ap.text = spec_ap.ToString();
+
+        comp_score_team1.text = Convert.ToString(gsi_team1_score);
+        comp_score_team2.text = Convert.ToString(gsi_team2_score);
+
+
+        comp_spec_ammo_loaded.text = spec_ammo_loaded.ToString();
+        comp_spec_ammo_reserve.text = spec_ammo_reserve.ToString();
+        comp_spec_ammo_max.text = spec_ammo_max.ToString();
+        comp_spec_stats_kills.text = Convert.ToString(spec_stats_kills);
+        comp_spec_stats_deaths.text = Convert.ToString(spec_stats_deaths);
+        comp_spec_stats_assists.text = Convert.ToString(spec_stats_assists);
+
     }
 
     void OnNewGameState(GameState gs)
@@ -88,6 +116,13 @@ public class GSI_Receiver : MonoBehaviour {
 
         spec_hp = gs.Player.State.Health;
         spec_ap = gs.Player.State.Armor;
+        spec_ammo_loaded = gs.Player.Weapons.ActiveWeapon.AmmoClip;
+        spec_ammo_max = gs.Player.Weapons.ActiveWeapon.AmmoClipMax;
+        //spec_ammo_reserve = gs.Player.Weapons.ActiveWeapon.AmmoReserve;
+        spec_stats_kills = gs.Player.MatchStats.Kills;
+        spec_stats_deaths = gs.Player.MatchStats.Deaths;
+        spec_stats_assists = gs.Player.MatchStats.Assists;
+
         spec_name = gs.Player.Name;
         spec_weapon_active = gs.Player.Weapons.ActiveWeapon.Name;
         spec_team = gs.Player.Team;
