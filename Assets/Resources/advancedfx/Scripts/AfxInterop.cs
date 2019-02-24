@@ -196,11 +196,6 @@ namespace advancedfx
             /// Client frame time (can be 0 e.g. if paused).
             /// </summary>
             Single FrameTime { get; }
-
-            Int32 Width { get; }
-            Int32 Height { get; }
-            Afx4x4 WorldToViewMatrix { get; }
-            Afx4x4 WorldToScreenMatrix { get; }
         }
 
 
@@ -210,28 +205,16 @@ namespace advancedfx
             Single IFrameInfo.AbsoluteFrameTime { get { return m_AbsoluteFrameTime; } }
             Single IFrameInfo.CurTime { get { return m_CurTime; } }
             Single IFrameInfo.FrameTime { get { return m_FrameTime; } }
-            Int32 IFrameInfo.Width { get { return m_Width; } }
-            Int32 IFrameInfo.Height { get { return m_Height; } }
-            Afx4x4 IFrameInfo.WorldToViewMatrix { get { return m_WorldToViewMatrix; } }
-            Afx4x4 IFrameInfo.WorldToScreenMatrix { get { return m_WorldToScreenMatrix; } }
 
             public Int32 FrameCount { get { return m_FrameCount; } set { m_FrameCount = value; } }
             public Single AbsoluteFrameTime { get { return m_AbsoluteFrameTime; } set { m_AbsoluteFrameTime = value; } }
             public Single CurTime { get { return m_CurTime; } set { m_CurTime = value; } }
             public Single FrameTime { get { return m_FrameTime; } set { m_FrameTime = value; } }
-            public Int32 Width { get { return m_Width; } set { m_Width = value; } }
-            public Int32 Height { get { return m_Height; } set { m_Height = value; } }
-            public Afx4x4 WorldToViewMatrix { get { return m_WorldToViewMatrix; } set { m_WorldToViewMatrix = value; } }
-            public Afx4x4 WorldToScreenMatrix { get { return m_WorldToScreenMatrix; } set { m_WorldToScreenMatrix = value; } }
 
             Int32 m_FrameCount;
             Single m_AbsoluteFrameTime;
             Single m_CurTime;
             Single m_FrameTime;
-            Int32 m_Width;
-            Int32 m_Height;
-            Afx4x4 m_WorldToViewMatrix;
-            Afx4x4 m_WorldToScreenMatrix;
         }
 
         public enum RenderType : int
@@ -242,59 +225,9 @@ namespace advancedfx
             Shadow = 3
         }
 
-        public interface ITextureInfo
-        {
-            UInt32 TextureID { get; }
-            String TextureGroup { get; }
-            String TextureName { get; }
-            UInt32 D3D9Width { get; }
-            UInt32 D3D9Height { get; }
-            UInt32 D3D9Levels { get; }
-            D3DUSAGE D3D9Usage { get; }
-            D3DFORMAT D3D9Format { get; }
-            D3DPOOL D3D9Pool { get; }
-            IntPtr SharedHandle { get; }
-        }
-
-        private class TextureInfo : ITextureInfo
-        {
-            UInt32 ITextureInfo.TextureID { get { return m_TextureID; } }
-            String ITextureInfo.TextureGroup { get { return m_TextureGroup; } }
-            String ITextureInfo.TextureName { get { return m_TextureName; } }
-            UInt32 ITextureInfo.D3D9Width { get { return m_D3D9Width; } }
-            UInt32 ITextureInfo.D3D9Height { get { return m_D3D9Height; } }
-            UInt32 ITextureInfo.D3D9Levels { get { return m_D3D9Levels; } }
-            D3DUSAGE ITextureInfo.D3D9Usage { get { return m_D3D9Usage; } }
-            D3DFORMAT ITextureInfo.D3D9Format { get { return m_D3D9Format; } }
-            D3DPOOL ITextureInfo.D3D9Pool { get { return m_D3D9Pool; } }
-            IntPtr ITextureInfo.SharedHandle { get { return m_SharedHandle; } }
-
-            public UInt32 TextureID { get { return m_TextureID; } set { m_TextureID = value; } }
-            public String TextureGroup { get { return m_TextureGroup; } set { m_TextureGroup = value; } }
-            public String TextureName { get { return m_TextureName; } set { m_TextureName = value; } }
-            public UInt32 D3D9Width { get { return m_D3D9Width; } set { m_D3D9Width = value; } }
-            public UInt32 D3D9Height { get { return m_D3D9Height; } set { m_D3D9Height = value; } }
-            public UInt32 D3D9Levels { get { return m_D3D9Levels; } set { m_D3D9Levels = value; } }
-            public D3DUSAGE D3D9Usage { get { return m_D3D9Usage; } set { m_D3D9Usage = value; } }
-            public D3DFORMAT D3D9Format { get { return m_D3D9Format; } set { m_D3D9Format = value; } }
-            public D3DPOOL D3D9Pool { get { return m_D3D9Pool; } set { m_D3D9Pool = value; } }
-            public IntPtr SharedHandle { get { return m_SharedHandle; } set { m_SharedHandle = value; } }
-
-            private UInt32 m_TextureID;
-            private String m_TextureGroup;
-            private String m_TextureName;
-            private UInt32 m_D3D9Width;
-            private UInt32 m_D3D9Height;
-            private UInt32 m_D3D9Levels;
-            private D3DUSAGE m_D3D9Usage;
-            private D3DFORMAT m_D3D9Format;
-            private D3DPOOL m_D3D9Pool;
-            private IntPtr m_SharedHandle;
-        }
-
         public interface ISurfaceInfo
         {
-            IntPtr SharedHandle { get; }
+            IntPtr Id { get; }
             UInt32 Width { get; }
             UInt32 Height { get; }
             D3DUSAGE Usage { get; }
@@ -306,7 +239,7 @@ namespace advancedfx
 
         private class SurfaceInfo : ISurfaceInfo
         {
-            IntPtr ISurfaceInfo.SharedHandle { get { return m_SharedHandle; } }
+            IntPtr ISurfaceInfo.Id { get { return m_Id; } }
             UInt32 ISurfaceInfo.Width { get { return m_Width; } }
             UInt32 ISurfaceInfo.Height { get { return m_Height; } }
             D3DUSAGE ISurfaceInfo.Usage { get { return m_Usage; } }
@@ -315,7 +248,7 @@ namespace advancedfx
             D3DMULTISAMPLE_TYPE ISurfaceInfo.MultiSampleType { get { return m_MultiSampleType;  } }
             UInt32 ISurfaceInfo.MultiSampleQuality { get { return m_MultiSampleQuality; } }
 
-            public IntPtr SharedHandle { get { return m_SharedHandle; } set { m_SharedHandle = value; } }
+            public IntPtr Id { get { return m_Id; } set { m_Id = value; } }
             public UInt32 Width { get { return m_Width; } set { m_Width = value; } }
             public UInt32 Height { get { return m_Height; } set { m_Height = value; } }
             public D3DUSAGE Usage { get { return m_Usage; } set { m_Usage = value; } }
@@ -324,7 +257,7 @@ namespace advancedfx
             public D3DMULTISAMPLE_TYPE MultiSampleType { get { return m_MultiSampleType; } set { m_MultiSampleType = value; } }
             public UInt32 MultiSampleQuality { get { return m_MultiSampleQuality; } set { m_MultiSampleQuality = value; } }
 
-            private IntPtr m_SharedHandle;
+            private IntPtr m_Id;
             private UInt32 m_Width;
             private UInt32 m_Height;
             private D3DUSAGE m_Usage;
@@ -338,31 +271,46 @@ namespace advancedfx
         {
             RenderType Type { get; }
 
-            /// <remarks>Can be null if not available, so handle this.</remarks>
-            Nullable<IntPtr> FbSurfaceHandle { get; }
+            Int32 Width { get; }
+
+            Int32 Height { get; }
+
+            Afx4x4 ViewMatrix { get; }
+
+            Afx4x4 ProjectionMatrix { get; }
 
             /// <remarks>Can be null if not available, so handle this.</remarks>
-            Nullable<IntPtr> FbDepthSurfaceHandle { get; }
+            Nullable<IntPtr> SurfaceId { get; }
 
             /// <remarks>Can be null if not available, so handle this! Assume this to happen especially at start-up!</remarks>
             IFrameInfo FrameInfo { get; }
+
         }
 
         private class RenderInfo : IRenderInfo
         {
             RenderType IRenderInfo.Type { get { return m_Type; } }
-            Nullable<IntPtr> IRenderInfo.FbSurfaceHandle { get { return m_FbSurfaceHandle; } }
-            Nullable<IntPtr> IRenderInfo.FbDepthSurfaceHandle { get { return m_FbDepthSurfaceHandle; } }
+            Int32 IRenderInfo.Width { get { return m_Width; } }
+            Int32 IRenderInfo.Height { get { return m_Height; } }
+            Afx4x4 IRenderInfo.ViewMatrix { get { return m_ViewMatrix; } }
+            Afx4x4 IRenderInfo.ProjectionMatrix { get { return m_ProjectionMatrix; } }
+            Nullable<IntPtr> IRenderInfo.SurfaceId { get { return m_SurfaceId; } }
             IFrameInfo IRenderInfo.FrameInfo { get { return m_FrameInfo; } }
 
             public RenderType Type { get { return m_Type; } set { m_Type = value; } }
-            public Nullable<IntPtr> FbSurfaceHandle { get { return m_FbSurfaceHandle; } set { m_FbSurfaceHandle = value; } }
-            public Nullable<IntPtr> FbDepthSurfaceHandle { get { return m_FbDepthSurfaceHandle; } set { m_FbDepthSurfaceHandle = value; } }
+            public Int32 Width { get { return m_Width; } set { m_Width = value; } }
+            public Int32 Height { get { return m_Height; } set { m_Height = value; } }
+            public Afx4x4 ViewMatrix { get { return m_ViewMatrix; } set { m_ViewMatrix = value; } }
+            public Afx4x4 ProjectionMatrix { get { return m_ProjectionMatrix; } set { m_ProjectionMatrix = value; } }
+            public Nullable<IntPtr> SurfaceId { get { return m_SurfaceId; } set { m_SurfaceId = value; } }
             public IFrameInfo FrameInfo { get { return m_FrameInfo; } set { m_FrameInfo = value; } }
 
             private RenderType m_Type;
-            private Nullable<IntPtr> m_FbSurfaceHandle;
-            private Nullable<IntPtr> m_FbDepthSurfaceHandle;
+            private Int32 m_Width;
+            private Int32 m_Height;
+            private Afx4x4 m_ViewMatrix;
+            private Afx4x4 m_ProjectionMatrix;
+            private Nullable<IntPtr> m_SurfaceId;
             private IFrameInfo m_FrameInfo;
         }
 
@@ -430,27 +378,13 @@ namespace advancedfx
             /// Offers a shared surface for usage.
             /// </summary>
             /// <param name="info">Info about the surface offerred.</param>
-            void RegisterSurface(ISurfaceInfo info);
+            void RegisterSurface(ISurfaceInfo surfaceInfo, out IntPtr sharedColorTextureHandle, out IntPtr sharedDepthTextureHandle);
 
             /// <summary>
             /// A surface surface must be released (if in use)!
             /// </summary>
-            /// <param name="surfaceHandle">The handle of the surface.</param>
-            void ReleaseSurface(IntPtr surfaceHandle);
-
-            /// <summary>
-            /// Offers a shared texture for usage.
-            /// </summary>
-            /// <param name="info">Info about the texture offerred.</param>
-            /// <remarks>This is currently not used!</remarks>
-            void RegisterTexture(ITextureInfo info);
-
-            /// <summary>
-            /// A shared texture must be released (if in use)!
-            /// </summary>
-            /// <param name="textureId">The ID of the texture.</param>
-            /// <remarks>This is currently not used!</remarks>
-            void ReleaseTexture(UInt32 textureId);
+            /// <param name="suraceId">The handle of the surface.</param>
+            void ReleaseSurface(IntPtr surfaceId);
 
             /// <summary>
             /// Warning, you are reponsible for the thread syncronization required!<br />
@@ -553,11 +487,53 @@ namespace advancedfx
 
                                     renderInfo.Type = RenderType.Normal;
 
-                                    IntPtr fbSurfaceHandle = pipeServer.ReadHandle(cancellationToken);
-                                    renderInfo.FbSurfaceHandle = IntPtr.Zero != fbSurfaceHandle ? new Nullable<IntPtr>(fbSurfaceHandle) : null;
+                                    renderInfo.Width = pipeServer.ReadInt32(cancellationToken);
+                                    renderInfo.Height = pipeServer.ReadInt32(cancellationToken);
 
-                                    IntPtr fbDepthSurfaceHandle = pipeServer.ReadHandle(cancellationToken);
-                                    renderInfo.FbDepthSurfaceHandle = IntPtr.Zero != fbDepthSurfaceHandle ? new Nullable<IntPtr>(fbDepthSurfaceHandle) : null;
+                                    Afx4x4 worldToViewMatrix = new Afx4x4();
+
+                                    worldToViewMatrix.M00 = pipeServer.ReadSingle(cancellationToken);
+                                    worldToViewMatrix.M01 = pipeServer.ReadSingle(cancellationToken);
+                                    worldToViewMatrix.M02 = pipeServer.ReadSingle(cancellationToken);
+                                    worldToViewMatrix.M03 = pipeServer.ReadSingle(cancellationToken);
+                                    worldToViewMatrix.M10 = pipeServer.ReadSingle(cancellationToken);
+                                    worldToViewMatrix.M11 = pipeServer.ReadSingle(cancellationToken);
+                                    worldToViewMatrix.M12 = pipeServer.ReadSingle(cancellationToken);
+                                    worldToViewMatrix.M13 = pipeServer.ReadSingle(cancellationToken);
+                                    worldToViewMatrix.M20 = pipeServer.ReadSingle(cancellationToken);
+                                    worldToViewMatrix.M21 = pipeServer.ReadSingle(cancellationToken);
+                                    worldToViewMatrix.M22 = pipeServer.ReadSingle(cancellationToken);
+                                    worldToViewMatrix.M23 = pipeServer.ReadSingle(cancellationToken);
+                                    worldToViewMatrix.M30 = pipeServer.ReadSingle(cancellationToken);
+                                    worldToViewMatrix.M31 = pipeServer.ReadSingle(cancellationToken);
+                                    worldToViewMatrix.M32 = pipeServer.ReadSingle(cancellationToken);
+                                    worldToViewMatrix.M33 = pipeServer.ReadSingle(cancellationToken);
+
+                                    renderInfo.ViewMatrix = worldToViewMatrix;
+
+                                    Afx4x4 projectionMatrix = new Afx4x4();
+
+                                    projectionMatrix.M00 = pipeServer.ReadSingle(cancellationToken);
+                                    projectionMatrix.M01 = pipeServer.ReadSingle(cancellationToken);
+                                    projectionMatrix.M02 = pipeServer.ReadSingle(cancellationToken);
+                                    projectionMatrix.M03 = pipeServer.ReadSingle(cancellationToken);
+                                    projectionMatrix.M10 = pipeServer.ReadSingle(cancellationToken);
+                                    projectionMatrix.M11 = pipeServer.ReadSingle(cancellationToken);
+                                    projectionMatrix.M12 = pipeServer.ReadSingle(cancellationToken);
+                                    projectionMatrix.M13 = pipeServer.ReadSingle(cancellationToken);
+                                    projectionMatrix.M20 = pipeServer.ReadSingle(cancellationToken);
+                                    projectionMatrix.M21 = pipeServer.ReadSingle(cancellationToken);
+                                    projectionMatrix.M22 = pipeServer.ReadSingle(cancellationToken);
+                                    projectionMatrix.M23 = pipeServer.ReadSingle(cancellationToken);
+                                    projectionMatrix.M30 = pipeServer.ReadSingle(cancellationToken);
+                                    projectionMatrix.M31 = pipeServer.ReadSingle(cancellationToken);
+                                    projectionMatrix.M32 = pipeServer.ReadSingle(cancellationToken);
+                                    projectionMatrix.M33 = pipeServer.ReadSingle(cancellationToken);
+
+                                    renderInfo.ProjectionMatrix = projectionMatrix;
+
+                                    IntPtr surfaceId = pipeServer.ReadHandle(cancellationToken);
+                                    renderInfo.SurfaceId = IntPtr.Zero != surfaceId ? new Nullable<IntPtr>(surfaceId) : null;
 
                                     IFrameInfo frameInfo = null;
 
@@ -633,43 +609,17 @@ namespace advancedfx
                                 break;
 
                             case DrawingMessage.NewTexture:
-                                {
-                                    TextureInfo textureInfo = new TextureInfo();
-
-                                    // TextureId:
-                                    textureInfo.TextureID = (UInt32)pipeServer.ReadInt32(cancellationToken);
-                                    textureInfo.TextureGroup = pipeServer.ReadUTF8String(cancellationToken);
-                                    textureInfo.TextureName = pipeServer.ReadUTF8String(cancellationToken);
-                                    textureInfo.D3D9Width = (UInt32)pipeServer.ReadInt32(cancellationToken);
-                                    textureInfo.D3D9Height = (UInt32)pipeServer.ReadInt32(cancellationToken);
-                                    textureInfo.D3D9Levels = (UInt32)pipeServer.ReadInt32(cancellationToken);
-                                    textureInfo.D3D9Usage = (D3DUSAGE)(UInt32)pipeServer.ReadInt32(cancellationToken);
-                                    textureInfo.D3D9Format = (D3DFORMAT)(UInt32)pipeServer.ReadInt32(cancellationToken);
-                                    textureInfo.D3D9Pool = (D3DPOOL)(UInt32)pipeServer.ReadInt32(cancellationToken);
-                                    textureInfo.SharedHandle = pipeServer.ReadHandle(cancellationToken);
-
-                                    implementation.RegisterTexture(textureInfo);
-                                }
-                                break;
+                                throw new System.ApplicationException("Unexpected DrawingMessage.NewTexture");
 
                             case DrawingMessage.ReleaseTexture:
-                                {
-                                    UInt32 textureId = (UInt32)pipeServer.ReadInt32(cancellationToken);
-                                    implementation.ReleaseTexture(textureId);
-
-                                    // Confirm the release to the client waiting:
-
-                                    pipeServer.WriteBoolean(true, cancellationToken);
-                                    pipeServer.Flush(cancellationToken);
-                                }
-                                break;
-
+                                throw new System.ApplicationException("Unexpected DrawingMessage.ReleaseTexture");
+ 
                             case DrawingMessage.NewSurface:
                                 {
                                     SurfaceInfo surfaceInfo = new SurfaceInfo();
 
                                     // TextureId:
-                                    surfaceInfo.SharedHandle = pipeServer.ReadHandle(cancellationToken);
+                                    surfaceInfo.Id = pipeServer.ReadHandle(cancellationToken);
                                     surfaceInfo.Width = (UInt32)pipeServer.ReadInt32(cancellationToken);
                                     surfaceInfo.Height = (UInt32)pipeServer.ReadInt32(cancellationToken);
                                     surfaceInfo.Usage = (D3DUSAGE)(UInt32)pipeServer.ReadInt32(cancellationToken);
@@ -678,13 +628,21 @@ namespace advancedfx
                                     surfaceInfo.MultiSampleType = (D3DMULTISAMPLE_TYPE)(UInt32)pipeServer.ReadInt32(cancellationToken);
                                     surfaceInfo.MultiSampleQuality = (UInt32)pipeServer.ReadInt32(cancellationToken);
 
-                                    implementation.RegisterSurface(surfaceInfo);
+                                    IntPtr sharedColorSurfaceHandle = IntPtr.Zero;
+                                    IntPtr sharedDepthSurfaceHandle = IntPtr.Zero;
+
+                                    implementation.RegisterSurface(surfaceInfo, out sharedColorSurfaceHandle, out sharedDepthSurfaceHandle);
+
+                                    pipeServer.WriteHandle(sharedColorSurfaceHandle, cancellationToken);
+                                    pipeServer.WriteHandle(sharedDepthSurfaceHandle, cancellationToken);
+                                    pipeServer.Flush(cancellationToken);
                                 }
                                 break;
 
                             case DrawingMessage.ReleaseSurface:
                                 {
                                     IntPtr surfaceHandle = pipeServer.ReadHandle(cancellationToken);
+
                                     implementation.ReleaseSurface(surfaceHandle);
 
                                     // Confirm the release to the client waiting:
@@ -739,7 +697,7 @@ namespace advancedfx
 
         private IImplementation implementation;
 
-        private const Int32 version = 1;
+        private const Int32 version = 2;
         private string pipeName = "advancedfxInterop";
 
         bool waitingForConnection = false;
@@ -1006,51 +964,6 @@ namespace advancedfx
                                     frameInfo.AbsoluteFrameTime = pipeServer.ReadSingle(cancellationToken);
                                     frameInfo.CurTime = pipeServer.ReadSingle(cancellationToken);
                                     frameInfo.FrameTime = pipeServer.ReadSingle(cancellationToken);
-
-                                    frameInfo.Width = pipeServer.ReadInt32(cancellationToken);
-                                    frameInfo.Height = pipeServer.ReadInt32(cancellationToken);
-
-                                    Afx4x4 worldToViewMatrix = new Afx4x4();
-
-                                    worldToViewMatrix.M00 = pipeServer.ReadSingle(cancellationToken);
-                                    worldToViewMatrix.M01 = pipeServer.ReadSingle(cancellationToken);
-                                    worldToViewMatrix.M02 = pipeServer.ReadSingle(cancellationToken);
-                                    worldToViewMatrix.M03 = pipeServer.ReadSingle(cancellationToken);
-                                    worldToViewMatrix.M10 = pipeServer.ReadSingle(cancellationToken);
-                                    worldToViewMatrix.M11 = pipeServer.ReadSingle(cancellationToken);
-                                    worldToViewMatrix.M12 = pipeServer.ReadSingle(cancellationToken);
-                                    worldToViewMatrix.M13 = pipeServer.ReadSingle(cancellationToken);
-                                    worldToViewMatrix.M20 = pipeServer.ReadSingle(cancellationToken);
-                                    worldToViewMatrix.M21 = pipeServer.ReadSingle(cancellationToken);
-                                    worldToViewMatrix.M22 = pipeServer.ReadSingle(cancellationToken);
-                                    worldToViewMatrix.M23 = pipeServer.ReadSingle(cancellationToken);
-                                    worldToViewMatrix.M30 = pipeServer.ReadSingle(cancellationToken);
-                                    worldToViewMatrix.M31 = pipeServer.ReadSingle(cancellationToken);
-                                    worldToViewMatrix.M32 = pipeServer.ReadSingle(cancellationToken);
-                                    worldToViewMatrix.M33 = pipeServer.ReadSingle(cancellationToken);
-
-                                    frameInfo.WorldToViewMatrix = worldToViewMatrix;
-
-                                    Afx4x4 worldToScreenMatrix = new Afx4x4();
-
-                                    worldToScreenMatrix.M00 = pipeServer.ReadSingle(cancellationToken);
-                                    worldToScreenMatrix.M01 = pipeServer.ReadSingle(cancellationToken);
-                                    worldToScreenMatrix.M02 = pipeServer.ReadSingle(cancellationToken);
-                                    worldToScreenMatrix.M03 = pipeServer.ReadSingle(cancellationToken);
-                                    worldToScreenMatrix.M10 = pipeServer.ReadSingle(cancellationToken);
-                                    worldToScreenMatrix.M11 = pipeServer.ReadSingle(cancellationToken);
-                                    worldToScreenMatrix.M12 = pipeServer.ReadSingle(cancellationToken);
-                                    worldToScreenMatrix.M13 = pipeServer.ReadSingle(cancellationToken);
-                                    worldToScreenMatrix.M20 = pipeServer.ReadSingle(cancellationToken);
-                                    worldToScreenMatrix.M21 = pipeServer.ReadSingle(cancellationToken);
-                                    worldToScreenMatrix.M22 = pipeServer.ReadSingle(cancellationToken);
-                                    worldToScreenMatrix.M23 = pipeServer.ReadSingle(cancellationToken);
-                                    worldToScreenMatrix.M30 = pipeServer.ReadSingle(cancellationToken);
-                                    worldToScreenMatrix.M31 = pipeServer.ReadSingle(cancellationToken);
-                                    worldToScreenMatrix.M32 = pipeServer.ReadSingle(cancellationToken);
-                                    worldToScreenMatrix.M33 = pipeServer.ReadSingle(cancellationToken);
-
-                                    frameInfo.WorldToScreenMatrix = worldToScreenMatrix;
 
                                     this.interOp.AddFrameInfo(frameInfo);
                                 }

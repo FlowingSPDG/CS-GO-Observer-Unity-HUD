@@ -5,6 +5,7 @@ using CSGSI;
 using CSGSI.Nodes;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using UnityEngine.UI;
 
 public class GSI_Receiver : MonoBehaviour {
     GameStateListener gsl;
@@ -31,7 +32,15 @@ public class GSI_Receiver : MonoBehaviour {
     public string spec_weapon_active;
     public string[] spec_greandes;
     public string spec_steamid;
-    
+
+
+    // to link other Unity components
+    public Text comp_spec_name;
+    public Text comp_spec_hp;
+    public Text comp_spec_ap;
+    /*
+    public Text comp_; // etc
+    */
 
     void Start () {
         gsl = new GameStateListener("http://192.168.1.14:3001");
@@ -45,8 +54,10 @@ public class GSI_Receiver : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        
-	}
+        comp_spec_name.text = spec_name.ToString();
+        comp_spec_hp.text = spec_hp.ToString();
+        comp_spec_ap.text = spec_ap.ToString();
+    }
 
     void OnNewGameState(GameState gs)
     {
@@ -69,8 +80,9 @@ public class GSI_Receiver : MonoBehaviour {
         {
             Debug.Log("SteamID : " + key);
             Debug.Log("dic : " + gsi_all_players[key]);
+            //var gsi_all_players_state = JsonConvert.DeserializeObject(gsi_all_players[key]);
         }
-        
+
 
         gsi_auth = gs.Auth.Token;
 
