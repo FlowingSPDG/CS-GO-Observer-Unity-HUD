@@ -7,6 +7,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using UnityEngine.UI;
 using System;
+using UnityEngine.SceneManagement;
 
 public class GSI_Receiver : MonoBehaviour {
     GameStateListener gsl;
@@ -127,5 +128,36 @@ public class GSI_Receiver : MonoBehaviour {
         spec_weapon_active = gs.Player.Weapons.ActiveWeapon.Name;
         spec_team = gs.Player.Team;
         spec_steamid = gs.Player.SteamID;
+
+        bool winner_scene_loaded = false;
+        if (gs.Round.Phase.ToString() == "Over")
+        {
+            //Debug.Log(gs.Round.WinTeam.ToString());
+            if (!winner_scene_loaded)
+            {
+                switch (gs.Round.WinTeam.ToString())
+                {
+                    case "CT":
+                        Debug.Log("CT wins");
+                        SceneManager.LoadScene("CTWin", LoadSceneMode.Additive);
+                        winner_scene_loaded = true;
+                        break;
+                    case "T":
+                        Debug.Log("T wins");
+                        SceneManager.LoadScene("TWin", LoadSceneMode.Additive);
+                        winner_scene_loaded = true;
+                        break;
+                    case "default":
+                        Debug.Log("Unknown");
+                        winner_scene_loaded = false;
+                        break;
+                }
+            }
+        }
+        else if (gs.Round.Phase.ToString() == "FreezeTime")
+        {
+            Debug.Log("Freeze time now");
+            winner_scene_loaded = false;
+        }
     }
 }
