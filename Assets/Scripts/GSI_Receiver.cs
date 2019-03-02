@@ -43,7 +43,13 @@ public class SteamAPIObject
 public class GSI_Receiver : MonoBehaviour {
     GameStateListener gsl;
 
+    dynamic PlayerState;
+    //public string[] PlayerState1;
+    //public Dictionary<string, object> PlayerState2;
+    //public Dictionary<string, object> PlayerState3;
+
     public string Steam_API_Key;
+    public string GSI_Auth;
 
     // general informations,such as rounds,phases,maps,etc
     public string gsi_phase;
@@ -92,6 +98,10 @@ public class GSI_Receiver : MonoBehaviour {
 
     public Text comp_score_team1;
     public Text comp_score_team2;
+    //public Text[] comp_players_name = new Text[10];
+    //public Dictionary<string, Text> comp_players_name;
+    public Text[] comp_players_name_array = new Text[10];
+    private Dictionary<string, object> gsi_all_players_dict;
 
     /*
     public Text comp_; // etc
@@ -150,29 +160,114 @@ public class GSI_Receiver : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        comp_spec_name.text = spec_name.ToString();
-        comp_spec_hp.text = spec_hp.ToString();
-        comp_spec_ap.text = spec_ap.ToString();
-
-        comp_score_team1.text = Convert.ToString(gsi_team1_score);
-        comp_score_team2.text = Convert.ToString(gsi_team2_score);
-
-
-        comp_spec_ammo_loaded.text = spec_ammo_loaded.ToString();
-        comp_spec_ammo_reserve.text = spec_ammo_reserve.ToString();
-        comp_spec_ammo_max.text = spec_ammo_max.ToString();
-        comp_spec_stats_kills.text = Convert.ToString(spec_stats_kills);
-        comp_spec_stats_deaths.text = Convert.ToString(spec_stats_deaths);
-        comp_spec_stats_assists.text = Convert.ToString(spec_stats_assists);
-
-        if (refresh_avatar)
+        if (gsl.Running)
         {
-            StartCoroutine("GetAvatar");
+
+            comp_spec_name.text = spec_name.ToString();
+            comp_spec_hp.text = spec_hp.ToString();
+            comp_spec_ap.text = spec_ap.ToString();
+
+            comp_score_team1.text = Convert.ToString(gsi_team1_score);
+            comp_score_team2.text = Convert.ToString(gsi_team2_score);
+
+
+            comp_spec_ammo_loaded.text = spec_ammo_loaded.ToString();
+            comp_spec_ammo_reserve.text = spec_ammo_reserve.ToString();
+            comp_spec_ammo_max.text = spec_ammo_max.ToString();
+            comp_spec_stats_kills.text = Convert.ToString(spec_stats_kills);
+            comp_spec_stats_deaths.text = Convert.ToString(spec_stats_deaths);
+            comp_spec_stats_assists.text = Convert.ToString(spec_stats_assists);
+
+            if (refresh_avatar)
+            {
+                StartCoroutine("GetAvatar");
+            }
+            if (gsi_all_players_dict != null)
+            {
+                var gsi_all_players_upd = gsi_all_players_dict;
+                foreach (var key in gsi_all_players_upd.Keys)
+                {
+                    //switch doesnt suupport dynamic types :(
+                    /*
+                    switch(PlayerState[key].observerslot)
+                    {
+
+                    }
+                    */
+                    Debug.Log("Observer slot : " + PlayerState[key].observer_slot);
+                    Debug.Log("Name : " + PlayerState[key].name);
+
+                    if (PlayerState[key].observer_slot == "0")
+                    {
+                        comp_players_name_array[0].text = PlayerState[key].name; // これが正解
+                    }
+                    else if (PlayerState[key].observer_slot == "1")
+                    {
+                        comp_players_name_array[1].text = PlayerState[key].name; // これが正解
+                    }
+                    else if (PlayerState[key].observer_slot == "2")
+                    {
+                        comp_players_name_array[2].text = PlayerState[key].name; // これが正解
+                    }
+                    else if (PlayerState[key].observer_slot == "3")
+                    {
+                        comp_players_name_array[3].text = PlayerState[key].name; // これが正解
+                    }
+                    else if (PlayerState[key].observer_slot == "4")
+                    {
+                        comp_players_name_array[4].text = PlayerState[key].name; // これが正解
+                    }
+                    else if (PlayerState[key].observer_slot == "5")
+                    {
+                        comp_players_name_array[5].text = PlayerState[key].name; // これが正解
+                    }
+                    else if (PlayerState[key].observer_slot == "6")
+                    {
+                        comp_players_name_array[6].text = PlayerState[key].name; // これが正解
+                    }
+                    else if (PlayerState[key].observer_slot == "7")
+                    {
+                        comp_players_name_array[7].text = PlayerState[key].name; // これが正解
+                    }
+                    else if (PlayerState[key].observer_slot == "8")
+                    {
+                        comp_players_name_array[8].text = PlayerState[key].name; // これが正解
+                    }
+                    else if (PlayerState[key].observer_slot == "9")
+                    {
+                        comp_players_name_array[9].text = PlayerState[key].name; // これが正解
+                    }
+
+
+                    Debug.Log("KEY : " + key + ",State : " + PlayerState[key]);
+                    //Debug.Log("KEY : " + key + ",Name : " + PlayerState[key].name);
+                    //comp_players_name[key].text = PlayerState[key].name;
+                    //comp_players_name[1].text = PlayerState[1].name;
+                    //comp_players_name[2].text = PlayerState[2].name;
+                    //comp_players_name[3].text = PlayerState[3].name;
+                    //comp_players_name[4].text = PlayerState[4].name;
+                    //comp_players_name[5].text = PlayerState[5].name;
+
+                    /*
+                    Debug.Log("SteamID : " + key);
+                    Debug.Log("dic : " + gsi_all_players[key]);
+                    //var gsi_all_players_state = JsonConvert.DeserializeObject(gsi_all_players[key]);
+                    PlayerState[key] = JsonConvert.DeserializeObject(gsi_all_players[key].ToString());
+                    Debug.Log("KEY[" + key + "]'s name is : " + PlayerState[key].name);
+                    */
+                }
+            }
         }
     }
 
     void OnNewGameState(GameState gs)
     {
+        /*
+        if(gs.Auth.ToString() != gsi_auth)
+        {
+            Debug.LogError("GSI Auth token error...");
+        }
+        */
         if (gs.Player.SteamID != spec_steamid)
         {
             spec_steamid = gs.Player.SteamID;
@@ -199,15 +294,10 @@ public class GSI_Receiver : MonoBehaviour {
         gsi_all_players_string = gs.AllPlayers.JSON;
         
         var gsi_all_players = JsonConvert.DeserializeObject<Dictionary<string, object>>(gsi_all_players_string);
+        gsi_all_players_dict = gsi_all_players;
+        PlayerState = JsonConvert.DeserializeObject(gsi_all_players_string);
         //var gsi_all_players_state = JsonConvert.DeserializeObject<Dictionary<string, string>>(gsi_all_players_string + "[state]");
         //var gsi_all_players_match_stats = JsonConvert.DeserializeObject<Dictionary<string, string>>(gsi_all_players_string + "match_stats");
-
-        foreach (var key in gsi_all_players.Keys)
-        {
-            Debug.Log("SteamID : " + key);
-            Debug.Log("dic : " + gsi_all_players[key]);
-            //var gsi_all_players_state = JsonConvert.DeserializeObject(gsi_all_players[key]);
-        }
 
 
         gsi_auth = gs.Auth.Token;
