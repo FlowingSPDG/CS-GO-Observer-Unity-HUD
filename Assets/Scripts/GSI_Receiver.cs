@@ -149,7 +149,7 @@ public class GSI_Receiver : MonoBehaviour {
     }
 
     void Start () {
-        gsl = new GameStateListener("http://192.168.1.14:3001");
+        gsl = new GameStateListener("http://127.0.0.1:3001");
         gsl.NewGameState += new NewGameStateHandler(OnNewGameState);
         if (!gsl.Start())
         {
