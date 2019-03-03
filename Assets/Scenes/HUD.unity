@@ -2686,8 +2686,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 14af955a0ca0e7244a25eaeb6fefdd89, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Steam_API_Key: FABC250D36A028D509E17DBDBB29E8AE
-  GSI_Auth: 
+  Steam_API_Key: 
+  GSI_Auth: ABCD
   gsi_phase: FreezeTime
   gsi_map: de_mirage
   gsi_team1_score: 13
