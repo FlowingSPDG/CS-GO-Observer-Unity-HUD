@@ -1,4 +1,4 @@
-(Proof-of-Concept,WIP)
+(Proof-of-Concept,WIP) (currently using older afx-interop version,will update later)  
 
 # CS-GO-Observer-Unity-HUD  
 This is the test program to show HUD(and others) by using GameStateIntegration,mirv_pgl,afx_interop.  
